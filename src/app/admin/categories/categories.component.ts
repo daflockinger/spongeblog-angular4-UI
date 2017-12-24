@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from '@angular/common/http/public_api';
+import { HttpResponse } from '@angular/common/http/src/response';
 import { Error } from 'tslint/lib/error';
 import { Response } from '@angular/http';
 import { FormUtilsService } from './../../service/utils/form-utils.service';
@@ -87,8 +89,8 @@ export class CategoriesComponent implements /*OnChanges,*/ OnInit {
       .subscribe(() => {
         this.toaster.emit({action: 'toast', params: ['Category removed!', 2000]});
         this.initCategories();
-      }, (error: Response) => {
-        this.toaster.emit({action: 'toast', params: [error.json().message, 7000]});
+      }, (error: any) => {
+        this.toaster.emit({action: 'toast', params: [JSON.parse(error.error).message, 7000]});
       });
   }
 }

@@ -1,5 +1,72 @@
 <app-admin-navbar></app-admin-navbar>
 
-<p>
-  posts works!
-</p>
+<!-- CONTENT -->
+<div class="container center-align">
+  <div class="row">
+    <div class="col s12">
+      <h2>Post Edit</h2>
+    </div>
+  </div>
+
+  <div class="card col s12 m8 offset-m2 l8 offset-l2">
+    <form [formGroup]="postFilterForm" (submit)="updatePosts()">
+      <div class="card-content">
+        <!-- <span class="card-title">General Settings</span> -->
+
+        <div class="row" *ngIf="postFilterForm">
+          <div class="input-field col s6">
+            <select name="chosenFilterValue" formControlName="chosenFilterValue"
+            materialize="material_select" [materializeSelectOptions]="filterValues">
+										<option *ngFor="let filterValue of filterValues" [value]="filterValue.id">{{filterValue.name}}</option>
+									</select>
+            <label *ngIf="selectedFilterName">{{selectedFilterName}}</label>
+          </div>
+          <div class="input-field col s4">
+            <select name="filter" formControlName="filter"
+            materialize="material_select">
+										<option *ngFor="let filter of filters" [value]="filter">{{filter}}</option>
+									</select>
+            <label>Filter by</label>
+          </div>
+          <div class="input-field col s2">
+            <button class="btn" type="submit"> <!-- materialize [materializeActions]="toaster"> -->
+							      Show
+						      </button>
+          </div>
+        </div>
+        <div class="row">
+          <table class="highlight">
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>User</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let post of posts">
+                <td>{{post.created | date}}</td>
+                <td>{{post.title}}</td>
+                <td>{{post.status}}</td>
+                <td>{{post.category.name}}</td>
+                <td>{{post.author.nickName}}</td>
+                <td><button class="btn" type="submit">
+                <i class="fa fa-edit " aria-hidden="true"  title="Edit"></i>
+              </button></td>
+                <td> <button class="btn" type="submit">
+                <i class="fa fa-trash " aria-hidden="true"  title="Remove"></i>
+              </button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<!-- CONTENT -->

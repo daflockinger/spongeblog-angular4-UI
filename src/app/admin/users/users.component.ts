@@ -137,7 +137,6 @@ export class UsersComponent implements OnInit {
        roles: this.mapRoles(userData.roles),
        userId: userData.userId,
     };
-    console.log(user);
     return user;
   }
 

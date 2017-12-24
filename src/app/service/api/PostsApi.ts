@@ -1,3 +1,5 @@
+import { PostDTO } from './../model/PostDTO';
+import { PostsPage } from './../model/PostsPage';
 /**
  * SpongeblogSP API
  * Spongeblog blogging API
@@ -13,9 +15,8 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Http, Headers, URLSearchParams } from '@angular/http';
-import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
-import { Response, ResponseContentType } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -23,6 +24,7 @@ import 'rxjs/add/operator/map';
 import * as models from '../model/models';
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
+import { AuthenticationService } from '../auth/authentication.service';
 
 
 @Injectable()
@@ -32,246 +34,14 @@ export class PostsApi {
   public defaultHeaders: Headers = new Headers();
   public configuration: Configuration = new Configuration();
 
-  constructor(protected http: Http, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+  constructor(protected http: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string,
+  @Optional() configuration: Configuration, @Inject(AuthenticationService) private auth: AuthenticationService) {
     if (basePath) {
       this.basePath = basePath;
     }
     if (configuration) {
       this.configuration = configuration;
     }
-  }
-
-  /**
-   * Returns all posts from defined User.
-   * @summary Posts from User
-   * @param userId Unique identifier of a User;
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsAuthorUserIdGetUsingGET(userId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsAuthorUserIdGetUsingGETWithHttpInfo(userId, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts from defined User and Status.
-   * @summary Posts from User and Status
-   * @param userId Unique identifier of a User;
-   * @param status Post Status Id
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsAuthorUserIdStatusGetUsingGET(userId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsAuthorUserIdStatusGetUsingGETWithHttpInfo(userId, status, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts from defined Category.
-   * @summary Posts from Category
-   * @param categoryId Unique identifier of a Category;
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsCategoryCategoryIdGetUsingGET(categoryId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsCategoryCategoryIdGetUsingGETWithHttpInfo(categoryId, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts from defined Category and Status.
-   * @summary Posts from Category and Status
-   * @param categoryId Unique identifier of a Category;
-   * @param status Post Status Id
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsCategoryCategoryIdStatusGetUsingGET(categoryId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsCategoryCategoryIdStatusGetUsingGETWithHttpInfo(categoryId, status, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts (paginated).
-   * @summary All posts
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsGetUsingGET(page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsGetUsingGETWithHttpInfo(page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Deletes a Post with defined Id.
-   * @summary Delete Post
-   * @param postId Unique identifier of a Post;
-   */
-  public apiV1PostsPostIdDeleteUsingDELETE(postId: number, extraHttpRequestParams?: any): Observable<any> {
-    return this.apiV1PostsPostIdDeleteUsingDELETEWithHttpInfo(postId, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Fetches Post with defined Id.
-   * @summary Get Post
-   * @param postId Unique identifier of a Post;
-   */
-  public apiV1PostsPostIdGetUsingGET(postId: number, extraHttpRequestParams?: any): Observable<models.PostDTO> {
-    return this.apiV1PostsPostIdGetUsingGETWithHttpInfo(postId, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Creates new Post entry.
-   * @summary Create Post
-   * @param postEdit postEdit
-   */
-  public apiV1PostsPostUsingPOST(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<models.PostDTO> {
-    return this.apiV1PostsPostUsingPOSTWithHttpInfo(postEdit, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Updated a Post entry.
-   * @summary Update Post
-   * @param postEdit postEdit
-   */
-  public apiV1PostsPutUsingPUT(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<any> {
-    return this.apiV1PostsPutUsingPUTWithHttpInfo(postEdit, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Restores previous Post entry.
-   * @summary Rewind Post
-   * @param postId Unique identifier of a Post;
-   */
-  public apiV1PostsRewindPostIdPutUsingPUT(postId: number, extraHttpRequestParams?: any): Observable<any> {
-    return this.apiV1PostsRewindPostIdPutUsingPUTWithHttpInfo(postId, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts with defined status.
-   * @summary Posts with status
-   * @param status Post Status Id
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsStatusStatusGetUsingGET(status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsStatusStatusGetUsingGETWithHttpInfo(status, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts from defined Tag.
-   * @summary Posts from Tag
-   * @param tagId Unique identifier of a Tag;
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsTagTagIdGetUsingGET(tagId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsTagTagIdGetUsingGETWithHttpInfo(tagId, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
-  }
-
-  /**
-   * Returns all posts from defined Tag and Status.
-   * @summary Posts from Tag and Status
-   * @param tagId Unique identifier of a Tag;
-   * @param status Post Status Id
-   * @param page Page number from that on entities are returned.
-   * @param size Entities per page.
-   */
-  public apiV1PostsTagTagIdStatusGetUsingGET(tagId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<models.PostsPage> {
-    return this.apiV1PostsTagTagIdStatusGetUsingGETWithHttpInfo(tagId, status, page, size, extraHttpRequestParams)
-      .map((response: Response) => {
-        if (response.status === 204) {
-          return undefined;
-        } else {
-          return response.json() || {};
-        }
-      });
   }
 
 
@@ -282,47 +52,32 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsAuthorUserIdGetUsingGETWithHttpInfo(userId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsAuthorUserIdGetUsingGET(userId: number,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/author/${userId}'
       .replace('${' + 'userId' + '}', String(userId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'userId' is not null or undefined
     if (userId === null || userId === undefined) {
       throw new Error('Required parameter userId was null or undefined when calling apiV1PostsAuthorUserIdGetUsingGET.');
     }
+    const requestOptions: any = {
+      search: queryParameters,
+      withCredentials: this.configuration.withCredentials
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
+  }
+
+  private createPagingParams(page: number, size: number) {
+    const queryParameters = new HttpParams();
     if (page !== undefined) {
       queryParameters.set('page', <any>page);
     }
-
     if (size !== undefined) {
       queryParameters.set('size', <any>size);
     }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters,
-      withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    return queryParameters;
   }
 
   /**
@@ -333,14 +88,13 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsAuthorUserIdStatusGetUsingGETWithHttpInfo(userId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsAuthorUserIdStatusGetUsingGET(userId: number, status: string,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/author/${userId}/${status}'
       .replace('${' + 'userId' + '}', String(userId))
       .replace('${' + 'status' + '}', String(status));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'userId' is not null or undefined
     if (userId === null || userId === undefined) {
       throw new Error('Required parameter userId was null or undefined when calling apiV1PostsAuthorUserIdStatusGetUsingGET.');
@@ -349,36 +103,13 @@ export class PostsApi {
     if (status === null || status === undefined) {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsAuthorUserIdStatusGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
 
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
+    };
 
-    return this.http.request(path, requestOptions);
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -388,47 +119,22 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsCategoryCategoryIdGetUsingGETWithHttpInfo(categoryId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsCategoryCategoryIdGetUsingGET(categoryId: number,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/category/${categoryId}'
       .replace('${' + 'categoryId' + '}', String(categoryId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'categoryId' is not null or undefined
     if (categoryId === null || categoryId === undefined) {
       throw new Error('Required parameter categoryId was null or undefined when calling apiV1PostsCategoryCategoryIdGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
+    };
 
-    return this.http.request(path, requestOptions);
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -439,14 +145,13 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsCategoryCategoryIdStatusGetUsingGETWithHttpInfo(categoryId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsCategoryCategoryIdStatusGetUsingGET(categoryId: number, status: string,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/category/${categoryId}/${status}'
       .replace('${' + 'categoryId' + '}', String(categoryId))
       .replace('${' + 'status' + '}', String(status));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'categoryId' is not null or undefined
     if (categoryId === null || categoryId === undefined) {
       throw new Error('Required parameter categoryId was null or undefined when calling apiV1PostsCategoryCategoryIdStatusGetUsingGET.');
@@ -455,36 +160,11 @@ export class PostsApi {
     if (status === null || status === undefined) {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsCategoryCategoryIdStatusGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -493,41 +173,15 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsGetUsingGETWithHttpInfo(page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsGetUsingGET(page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts';
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const queryParameters = this.createPagingParams(page, size);
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -535,38 +189,21 @@ export class PostsApi {
    * Deletes a Post with defined Id.
    * @param postId Unique identifier of a Post;
    */
-  public apiV1PostsPostIdDeleteUsingDELETEWithHttpInfo(postId: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsPostIdDeleteUsingDELETE(postId: number, extraHttpRequestParams?: any): Observable<any> {
     const path = this.basePath + '/api/v1/posts/${postId}'
       .replace('${' + 'postId' + '}', String(postId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    let headers = new HttpHeaders();
+    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     // verify required parameter 'postId' is not null or undefined
     if (postId === null || postId === undefined) {
       throw new Error('Required parameter postId was null or undefined when calling apiV1PostsPostIdDeleteUsingDELETE.');
     }
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Delete,
+    const requestOptions: any = {
       headers: headers,
-      search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.delete(path, requestOptions);
   }
 
   /**
@@ -574,38 +211,18 @@ export class PostsApi {
    * Fetches Post with defined Id.
    * @param postId Unique identifier of a Post;
    */
-  public apiV1PostsPostIdGetUsingGETWithHttpInfo(postId: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsPostIdGetUsingGET(postId: number, extraHttpRequestParams?: any): Observable<PostDTO> {
     const path = this.basePath + '/api/v1/posts/${postId}'
       .replace('${' + 'postId' + '}', String(postId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
     // verify required parameter 'postId' is not null or undefined
     if (postId === null || postId === undefined) {
       throw new Error('Required parameter postId was null or undefined when calling apiV1PostsPostIdGetUsingGET.');
     }
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
-      search: queryParameters,
+    const requestOptions: any = {
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostDTO>(path, requestOptions);
   }
 
   /**
@@ -613,40 +230,23 @@ export class PostsApi {
    * Creates new Post entry.
    * @param postEdit postEdit
    */
-  public apiV1PostsPostUsingPOSTWithHttpInfo(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsPostUsingPOST(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<PostDTO> {
     const path = this.basePath + '/api/v1/posts';
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    let headers = new HttpHeaders();
+    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     // verify required parameter 'postEdit' is not null or undefined
     if (postEdit === null || postEdit === undefined) {
       throw new Error('Required parameter postEdit was null or undefined when calling apiV1PostsPostUsingPOST.');
     }
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
+    headers = headers.append('Content-Type', 'application/json');
 
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    headers.set('Content-Type', 'application/json');
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Post,
+    const requestOptions: any = {
       headers: headers,
-      body: postEdit == null ? '' : JSON.stringify(postEdit), // https://github.com/angular/angular/issues/10612
-      search: queryParameters,
+      body: postEdit,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.post(path, requestOptions);
   }
 
   /**
@@ -654,40 +254,24 @@ export class PostsApi {
    * Updated a Post entry.
    * @param postEdit postEdit
    */
-  public apiV1PostsPutUsingPUTWithHttpInfo(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsPutUsingPUT(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<any> {
     const path = this.basePath + '/api/v1/posts';
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    let headers = new HttpHeaders();
+    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     // verify required parameter 'postEdit' is not null or undefined
     if (postEdit === null || postEdit === undefined) {
       throw new Error('Required parameter postEdit was null or undefined when calling apiV1PostsPutUsingPUT.');
     }
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
+    headers = headers.append('Content-Type', 'application/json');
 
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    headers.set('Content-Type', 'application/json');
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Put,
+    const requestOptions: any = {
       headers: headers,
-      body: postEdit == null ? '' : JSON.stringify(postEdit), // https://github.com/angular/angular/issues/10612
-      search: queryParameters,
+      body: postEdit,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
+    };
 
-    return this.http.request(path, requestOptions);
+    return this.http.put(path, requestOptions);
   }
 
   /**
@@ -695,38 +279,21 @@ export class PostsApi {
    * Restores previous Post entry.
    * @param postId Unique identifier of a Post;
    */
-  public apiV1PostsRewindPostIdPutUsingPUTWithHttpInfo(postId: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsRewindPostIdPutUsingPUT(postId: number, extraHttpRequestParams?: any): Observable<any> {
     const path = this.basePath + '/api/v1/posts/rewind/${postId}'
       .replace('${' + 'postId' + '}', String(postId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const headers = new HttpHeaders();
     // verify required parameter 'postId' is not null or undefined
     if (postId === null || postId === undefined) {
       throw new Error('Required parameter postId was null or undefined when calling apiV1PostsRewindPostIdPutUsingPUT.');
     }
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Put,
+    const requestOptions: any = {
       headers: headers,
-      search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
+    };
 
-    return this.http.request(path, requestOptions);
+    return this.http.put(path, requestOptions);
   }
 
   /**
@@ -736,47 +303,21 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsStatusStatusGetUsingGETWithHttpInfo(status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsStatusStatusGetUsingGET(status: string,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/status/${status}'
       .replace('${' + 'status' + '}', String(status));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'status' is not null or undefined
     if (status === null || status === undefined) {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsStatusStatusGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -786,47 +327,21 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsTagTagIdGetUsingGETWithHttpInfo(tagId: number,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsTagTagIdGetUsingGET(tagId: number,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/tag/${tagId}'
       .replace('${' + 'tagId' + '}', String(tagId));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'tagId' is not null or undefined
     if (tagId === null || tagId === undefined) {
       throw new Error('Required parameter tagId was null or undefined when calling apiV1PostsTagTagIdGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
   }
 
   /**
@@ -837,14 +352,13 @@ export class PostsApi {
    * @param page Page number from that on entities are returned.
    * @param size Entities per page.
    */
-  public apiV1PostsTagTagIdStatusGetUsingGETWithHttpInfo(tagId: number, status: string,
-  page?: number, size?: number, extraHttpRequestParams?: any): Observable<Response> {
+  public apiV1PostsTagTagIdStatusGetUsingGET(tagId: number, status: string,
+  page?: number, size?: number, extraHttpRequestParams?: any): Observable<PostsPage> {
     const path = this.basePath + '/api/v1/posts/tag/${tagId}/${status}'
       .replace('${' + 'tagId' + '}', String(tagId))
       .replace('${' + 'status' + '}', String(status));
 
-    const queryParameters = new URLSearchParams();
-    const headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+    const queryParameters = this.createPagingParams(page, size);
     // verify required parameter 'tagId' is not null or undefined
     if (tagId === null || tagId === undefined) {
       throw new Error('Required parameter tagId was null or undefined when calling apiV1PostsTagTagIdStatusGetUsingGET.');
@@ -853,36 +367,10 @@ export class PostsApi {
     if (status === null || status === undefined) {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsTagTagIdStatusGetUsingGET.');
     }
-    if (page !== undefined) {
-      queryParameters.set('page', <any>page);
-    }
-
-    if (size !== undefined) {
-      queryParameters.set('size', <any>size);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json'
-    ];
-
-    // to determine the Accept header
-    const produces: string[] = [
-      'application/json'
-    ];
-
-    let requestOptions: RequestOptionsArgs = new RequestOptions({
-      method: RequestMethod.Get,
-      headers: headers,
+    const requestOptions: any = {
       search: queryParameters,
       withCredentials: this.configuration.withCredentials
-    });
-    // https://github.com/swagger-api/swagger-codegen/issues/4037
-    if (extraHttpRequestParams) {
-      requestOptions = (<any>Object).assign(requestOptions, extraHttpRequestParams);
-    }
-
-    return this.http.request(path, requestOptions);
+    };
+    return this.http.get<PostsPage>(path, requestOptions);
   }
-
 }
