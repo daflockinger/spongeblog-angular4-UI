@@ -43,7 +43,9 @@
                 <th>Status</th>
                 <th>Category</th>
                 <th>User</th>
-                <th></th>
+                <th><a [routerLink]="['/admin/posts/0']" target="_blank"><button class="btn" type="button">
+                    <i class="fa fa-plus " aria-hidden="true"  title="Create"></i>
+                  </button></a></th>
                 <th></th>
               </tr>
             </thead>
@@ -54,10 +56,10 @@
                 <td>{{post.status}}</td>
                 <td>{{post.category.name}}</td>
                 <td>{{post.author.nickName}}</td>
-                <td><button class="btn" type="submit">
+                <td><a [routerLink]="['/admin/posts/' + post.postId]" target="_blank"><button class="btn" type="button">
                 <i class="fa fa-edit " aria-hidden="true"  title="Edit"></i>
-              </button></td>
-                <td> <button class="btn" type="submit">
+              </button></a></td>
+                <td> <button class="btn" type="button" (click)="removePost(post.postId)">
                 <i class="fa fa-trash " aria-hidden="true"  title="Remove"></i>
               </button></td>
               </tr>

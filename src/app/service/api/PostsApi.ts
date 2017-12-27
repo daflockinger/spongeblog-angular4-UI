@@ -201,7 +201,8 @@ export class PostsApi {
     }
     const requestOptions: any = {
       headers: headers,
-      withCredentials: this.configuration.withCredentials
+      withCredentials: this.configuration.withCredentials,
+      responseType: 'text'
     };
     return this.http.delete(path, requestOptions);
   }
@@ -240,13 +241,11 @@ export class PostsApi {
       throw new Error('Required parameter postEdit was null or undefined when calling apiV1PostsPostUsingPOST.');
     }
     headers = headers.append('Content-Type', 'application/json');
-
     const requestOptions: any = {
       headers: headers,
-      body: postEdit,
       withCredentials: this.configuration.withCredentials
     };
-    return this.http.post(path, requestOptions);
+    return this.http.post<PostDTO>(path, postEdit, requestOptions);
   }
 
   /**
@@ -267,11 +266,11 @@ export class PostsApi {
 
     const requestOptions: any = {
       headers: headers,
-      body: postEdit,
-      withCredentials: this.configuration.withCredentials
+      withCredentials: this.configuration.withCredentials,
+      responseType: 'text'
     };
 
-    return this.http.put(path, requestOptions);
+    return this.http.put(path, postEdit, requestOptions);
   }
 
   /**

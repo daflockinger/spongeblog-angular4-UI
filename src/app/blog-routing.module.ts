@@ -1,3 +1,4 @@
+import { PostEditorComponent } from './admin/post-editor/post-editor.component';
 import { AuthGuardService } from './service/auth/auth-guard.service';
 import { LoginComponent } from './admin/login/login.component';
 import { NavbarComponent } from './parts/navbar/navbar.component';
@@ -23,6 +24,11 @@ const routes: Routes = [
     path: 'admin/posts',
     component: PostsComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'admin/posts/:id',
+    component: PostEditorComponent,
     canActivate: [AuthGuardService],
   },
   {
