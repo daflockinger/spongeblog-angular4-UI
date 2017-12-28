@@ -1,8 +1,10 @@
 import { CleanUrlUtilsService } from './../../service/utils/clean-url-utils.service';
 import { CategoryDTO } from './../../service/model/CategoryDTO';
 import { CategoriesApi } from './../../service/api/CategoriesApi';
-import { Component, OnInit } from '@angular/core';
-import {MaterializeDirective} from 'angular2-materialize';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { MaterializeDirective, MaterializeAction } from 'angular2-materialize';
+import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +14,7 @@ import {MaterializeDirective} from 'angular2-materialize';
 })
 export class NavbarComponent implements OnInit {
   categories: CategoryDTO[];
+  updateMenu = new EventEmitter<string|MaterializeAction>();
 
   constructor(private categoryApi: CategoriesApi, private utils: CleanUrlUtilsService) {
     categoryApi.apiV1CategoriesGetUsingGET().subscribe((categories: CategoryDTO[]) => {
@@ -22,7 +25,19 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  public hasChildren(children: Array<any>): boolean {
+    return !_.isEmpty(children);
+  }
+
+  public updateDropdown() {
+    this.updateMenu.emit('dropdown');
+  }
+
   createCategoryLink(category: CategoryDTO) {
-    return this.utils.cleanLink(CleanUrlUtilsService.CATEGORY, category.name, category.categoryId);
+    if (category.pageId === null) {
+      return this.utils.cleanLink(CleanUrlUtilsService.CATEGORY, category.name, category.categoryId);
+    } else {
+      return this.utils.cleanLink(CleanUrlUtilsService.PAGE, category.name, category.categoryId);
+    }
   }
 }

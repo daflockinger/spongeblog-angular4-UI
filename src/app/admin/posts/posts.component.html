@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="card col s12 m8 offset-m2 l8 offset-l2">
+  <div class="card col s12 m8 offset-m2 l8 offset-l2" materialize [materializeActions]="toaster">
     <form [formGroup]="postFilterForm" (submit)="updatePosts()">
       <div class="card-content">
         <!-- <span class="card-title">General Settings</span> -->
@@ -29,7 +29,7 @@
             <label>Filter by</label>
           </div>
           <div class="input-field col s2">
-            <button class="btn" type="submit"> <!-- materialize [materializeActions]="toaster"> -->
+            <button class="btn" type="submit">
 							      Show
 						      </button>
           </div>

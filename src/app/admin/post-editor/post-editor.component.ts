@@ -1,8 +1,9 @@
+import { MaterializeAction, MaterializeDirective } from 'angular2-materialize';
 import { UserEditDTO } from './../../service/model/UserEditDTO';
 import { FilterValue, PostUtilsService } from './../../service/utils/post-utils.service';
 import { PostsApi } from './../../service/api/PostsApi';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { PostDTO, UsersApi, CategoriesApi, TagsApi, TagDTO, UserInfoDTO, CategoryDTO } from '../../service/index';
 import { Observable } from 'rxjs/Rx';
@@ -24,6 +25,7 @@ export class PostEditorComponent implements OnInit {
   tags: Array<FilterValue>;
   statuses: Array<FilterValue>;
   authors: Array<FilterValue>;
+  toaster = new EventEmitter<string|MaterializeAction>();
 
   constructor( @Inject(FormBuilder) private formBuilder: FormBuilder,
     @Inject(PostsApi) private postApi: PostsApi,
@@ -124,7 +126,7 @@ export class PostEditorComponent implements OnInit {
     this.mapTags(this.postEditForm.value['tags']).subscribe(tags => {
       this.postApi.apiV1PostsPostUsingPOST(this.mapPost(tags)).subscribe(storedPost => {
         this.post.postId = storedPost.postId;
-        // TODO add toaster
+        this.toaster.emit({action: 'toast', params: ['Post saved!', 2000]});
       });
     });
   }
@@ -159,8 +161,7 @@ export class PostEditorComponent implements OnInit {
       const post: PostDTO = this.mapPost(tags);
       post.postId = this.post.postId;
       this.postApi.apiV1PostsPutUsingPUT(post).subscribe(storedPost => {
-        console.log('updated!');
-        // TODO add toaster
+        this.toaster.emit({action: 'toast', params: ['Post saved!', 2000]});
       });
     });
   }

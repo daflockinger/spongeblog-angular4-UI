@@ -63,19 +63,19 @@ export class PostsApi {
       throw new Error('Required parameter userId was null or undefined when calling apiV1PostsAuthorUserIdGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);
   }
 
   private createPagingParams(page: number, size: number) {
-    const queryParameters = new HttpParams();
+    let queryParameters = new HttpParams();
     if (page !== undefined) {
-      queryParameters.set('page', <any>page);
+      queryParameters = queryParameters.set('page', <any>page);
     }
     if (size !== undefined) {
-      queryParameters.set('size', <any>size);
+      queryParameters = queryParameters.set('size', <any>size);
     }
     return queryParameters;
   }
@@ -105,7 +105,7 @@ export class PostsApi {
     }
 
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
 
@@ -130,7 +130,7 @@ export class PostsApi {
       throw new Error('Required parameter categoryId was null or undefined when calling apiV1PostsCategoryCategoryIdGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
 
@@ -161,7 +161,7 @@ export class PostsApi {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsCategoryCategoryIdStatusGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);
@@ -178,7 +178,7 @@ export class PostsApi {
 
     const queryParameters = this.createPagingParams(page, size);
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);
@@ -313,7 +313,7 @@ export class PostsApi {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsStatusStatusGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);
@@ -337,7 +337,7 @@ export class PostsApi {
       throw new Error('Required parameter tagId was null or undefined when calling apiV1PostsTagTagIdGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);
@@ -367,7 +367,7 @@ export class PostsApi {
       throw new Error('Required parameter status was null or undefined when calling apiV1PostsTagTagIdStatusGetUsingGET.');
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);

@@ -9,6 +9,7 @@ export class CleanUrlUtilsService {
   public static readonly USER = 'user';
   public static readonly CATEGORY = 'category';
   public static readonly POST = 'posts';
+  public static readonly PAGE = 'page';
 
   constructor() { }
 

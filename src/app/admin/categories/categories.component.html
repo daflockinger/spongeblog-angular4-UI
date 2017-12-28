@@ -13,8 +13,9 @@
         <thead>
           <tr>
             <th data-field="name">Name</th>
-            <th data-field="name">Parent</th>
-            <th data-field="name">Rank</th>
+            <th data-field="parent">Parent</th>
+            <th data-field="rank">Rank</th>
+            <th data-field="pageId">Page ID</th>
             <td></td>
             <td></td>
           </tr>
@@ -46,6 +47,11 @@
 				<input type="hidden" formControlName="categoryId"/>
 			</div>
             </td>
+            <td>
+                <div class="input-field col s12">
+          <input type="number" formControlName="pageId"/>
+        </div>
+              </td>
             <td *ngIf="!category.value.categoryId">
               <button class="btn waves-effect waves-light category-save" type="submit"
               (click)="insertCategory(category)">

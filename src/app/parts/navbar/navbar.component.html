@@ -5,14 +5,15 @@
       <a [routerLink]="['']" class="brand-logo">Logo</a>
       <!-- NAV DESKTOP -->
       <ul class="right hide-on-med-and-down">
-         <li *ngFor="let category of categories">
-          <a *ngIf="!category.children" [routerLink]="createCategoryLink(category)">
+         <li *ngFor="let category of categories; let categoryIndex = index">
+          <a *ngIf="!hasChildren(category.children)" [routerLink]="createCategoryLink(category)">
             {{category.name}}
           </a>
 
-          <a materialize="dropdown" *ngIf="category.children" class="dropdown-button"
-  data-activates="dropdown_1">{{category.name}}</a>
-          <ul id='dropdown_1'  *ngIf="category.children"
+          <a materialize="dropdown" *ngIf="hasChildren(category.children)" class="dropdown-button"
+          [materializeActions]="updateMenu"
+  [attr.data-activates]="'dropdown_' + categoryIndex" (mousedown)="updateDropdown()">{{category.name}}</a>
+          <ul [id]="'dropdown_' + categoryIndex"  *ngIf="category.children"
            class='dropdown-content'>
             <li>
               <a [routerLink]="createCategoryLink(category)">{{category.name}}</a>

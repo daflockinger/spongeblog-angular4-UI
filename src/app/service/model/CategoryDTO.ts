@@ -40,4 +40,8 @@ export interface CategoryDTO {
      */
     rank?: number;
 
+    /**
+     * ID of the assigned page if it's a page-category (optional field).
+    */
+    pageId?: number;
 }

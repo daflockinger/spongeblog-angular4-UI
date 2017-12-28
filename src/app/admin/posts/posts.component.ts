@@ -1,3 +1,4 @@
+import { MaterializeAction, MaterializeDirective } from 'angular2-materialize';
 import { FilterValue, PostUtilsService } from './../../service/utils/post-utils.service';
 import { PostPreviewDTO } from './../../service/model/PostPreviewDTO';
 import { PostDTO } from './../../service/model/PostDTO';
@@ -7,7 +8,7 @@ import { CategoriesApi, TagDTO, UserEditDTO, UsersApi } from '../../service';
 import { FormUtilsService } from './../../service/utils/form-utils.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PostsApi } from './../../service/api/PostsApi';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,9 +25,10 @@ export class PostsComponent implements OnInit {
   selectedFilterName: string;
   filterValues: FilterValue[] = [{ id: '1', name: 'Please choose filter' }];
   filterValueMap: Map<string, Observable<FilterValue[]>> = new Map<string, Observable<FilterValue[]>>();
+  toaster = new EventEmitter<string|MaterializeAction>();
 
   currentPage = 0;
-  postsPerPage = 5;
+  postsPerPage = 1000;
 
   postApi: PostsApi;
   posts: PostPreviewDTO[];
@@ -104,13 +106,14 @@ export class PostsComponent implements OnInit {
     if (_.isEmpty(filterValue)) {
       filterValue = _.first(this.filterValues).id;
     }
+    console.log('filtervalue ' + filterValue);
     return filterValue;
   }
 
   public removePost(postId: number) {
     this.postApi.apiV1PostsPostIdDeleteUsingDELETE(postId).subscribe(deleted => {
-      console.log('stuff deleted');
-      // TODO add toaster for remove
+      this.toaster.emit({action: 'toast', params: ['Post removed!', 2000]});
+      this.updatePosts();
     });
   }
 

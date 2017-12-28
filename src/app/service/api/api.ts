@@ -8,4 +8,6 @@ export * from './TagsApi';
 import { TagsApi } from './TagsApi';
 export * from './UsersApi';
 import { UsersApi } from './UsersApi';
-export const APIS = [BlogApi, CategoriesApi, PostsApi, TagsApi, UsersApi];
+export * from './PagesApi';
+import {PagesApi} from './PagesApi';
+export const APIS = [BlogApi, CategoriesApi, PostsApi, TagsApi, UsersApi, PagesApi];
