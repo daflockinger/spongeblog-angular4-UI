@@ -11,13 +11,15 @@ import { BlogApi } from './../service/api/BlogApi';
 import { PostPreviewDTO } from './../service/model/PostPreviewDTO';
 import { PostsApi } from './../service/api/PostsApi';
 import { Component, OnInit } from '@angular/core';
-
+import { Title } from '@angular/platform-browser';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss'],
-  providers: [PostsApi, BlogApi, CleanUrlUtilsService]
+  providers: [PostsApi, BlogApi, CleanUrlUtilsService, Title]
 })
 export class PostListComponent implements OnInit {
   page: PostsPage;
@@ -30,23 +32,24 @@ export class PostListComponent implements OnInit {
   private DEFAULT_STATUS = 'PUBLIC';
 
   constructor(private postApi: PostsApi, private blogApi: BlogApi,
-  private router: ActivatedRoute, private utils: CleanUrlUtilsService) { }
+  private router: ActivatedRoute, private utils: CleanUrlUtilsService,
+   private titleService: Title) { }
 
   ngOnInit() {
-    this.blogApi.apiV1BlogGetUsingGET().subscribe((blog: BlogDTO) => {
-      this.blog = blog;
-    });
-    this.router.paramMap.switchMap((params: ParamMap) =>
-      this.getPostsFor(params)
-    ).subscribe((page: PostsPage) => {
-      this.page = page;
+    this.router.paramMap.subscribe((params: ParamMap) => {
+    Observable.forkJoin(
+      this.getPostsFor(params), this.blogApi.apiV1BlogGetUsingGET()).subscribe((postsAndBlog) => {
+      this.page = postsAndBlog[0];
+      this.blog = postsAndBlog[1];
+      this.setTitle(params.get('id'), this.getCorrectPage(params.get('page')));
+      });
     });
   }
 
   private getPostsFor(params: ParamMap) {
     const id = this.utils.parseId(params.get('id'));
     const type = params.get('type');
-    const page = this.saveToNumber(params.get('page'), this.DEFAULT_PAGE_NUMBER) - 1;
+    const page = this.getCorrectPage(params.get('page'));
     this.currentPage = page + 1;
     this.createPath(type, params.get('id'));
 
@@ -64,6 +67,24 @@ export class PostListComponent implements OnInit {
         return this.postApi.apiV1PostsStatusStatusGetUsingGET(
             this.DEFAULT_STATUS, page, this.DEFAULT_POSTS_PER_PAGE);
     }
+  }
+
+  private getCorrectPage(page: string) {
+    return this.saveToNumber(page, this.DEFAULT_PAGE_NUMBER) - 1;
+  }
+
+  private setTitle(idString: string, page: number) {
+    let title: string = this.utils.parseName(idString);
+    if (_.isEmpty(title)) {
+      title = this.blog.settings.title;
+    }
+    this.blog.settings.title = title;
+
+    let titleWithPagination: string = title;
+    if (page !== null) {
+      titleWithPagination += ' - page ' + (page + 1);
+    }
+    this.titleService.setTitle(titleWithPagination);
   }
 
   private createPath(type: string, id: any) {

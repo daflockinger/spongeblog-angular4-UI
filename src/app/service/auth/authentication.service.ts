@@ -31,4 +31,9 @@ export class AuthenticationService {
     const token = this.localStorageService.get<string>(AuthenticationService.TOKEN_PARAM);
     return (token != null) ? token : '';
   }
+
+  public getUserEmail() {
+    const token = this.getToken();
+    return this.jwtHelper.decodeToken(token)['email'];
+  }
 }

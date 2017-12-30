@@ -1,3 +1,4 @@
+import { PostEditorComponent } from './admin/post-editor/post-editor.component';
 import { AuthGuardService } from './service/auth/auth-guard.service';
 import { LoginComponent } from './admin/login/login.component';
 import { NavbarComponent } from './parts/navbar/navbar.component';
@@ -11,6 +12,7 @@ import { PostListComponent } from './post-list/post-list.component';
 import { PostComponent } from './post/post.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PageComponent } from './page/page.component';
 
 
 const routes: Routes = [
@@ -23,6 +25,11 @@ const routes: Routes = [
     path: 'admin/posts',
     component: PostsComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'admin/posts/:id',
+    component: PostEditorComponent,
     canActivate: [AuthGuardService],
   },
   {
@@ -47,6 +54,10 @@ const routes: Routes = [
   {
     path: CleanUrlUtilsService.POST + '/:id',
     component: PostComponent,
+  },
+  {
+    path: CleanUrlUtilsService.PAGE + '/:id',
+    component: PageComponent,
   },
   {
     path: '',

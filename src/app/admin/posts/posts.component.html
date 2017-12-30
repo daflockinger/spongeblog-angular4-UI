@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="card col s12 m8 offset-m2 l8 offset-l2">
+  <div class="card col s12 m8 offset-m2 l8 offset-l2" materialize [materializeActions]="toaster">
     <form [formGroup]="postFilterForm" (submit)="updatePosts()">
       <div class="card-content">
         <!-- <span class="card-title">General Settings</span> -->
@@ -29,9 +29,7 @@
             <label>Filter by</label>
           </div>
           <div class="input-field col s2">
-            <button class="btn" type="submit"> <!-- materialize [materializeActions]="toaster"> -->
-							      Show
-						      </button>
+            <button class="btn" type="submit">Show</button>
           </div>
         </div>
         <div class="row">
@@ -43,7 +41,9 @@
                 <th>Status</th>
                 <th>Category</th>
                 <th>User</th>
-                <th></th>
+                <th><a [routerLink]="['/admin/posts/0']" target="_blank"><button class="btn" type="button">
+                    <i class="fa fa-plus " aria-hidden="true"  title="Create"></i>
+                  </button></a></th>
                 <th></th>
               </tr>
             </thead>
@@ -52,12 +52,12 @@
                 <td>{{post.created | date}}</td>
                 <td>{{post.title}}</td>
                 <td>{{post.status}}</td>
-                <td>{{post.category.name}}</td>
+                <td><span *ngIf="post.category">{{post.category.name}}</span></td>
                 <td>{{post.author.nickName}}</td>
-                <td><button class="btn" type="submit">
+                <td><a [routerLink]="['/admin/posts/' + post.postId]" target="_blank"><button class="btn" type="button">
                 <i class="fa fa-edit " aria-hidden="true"  title="Edit"></i>
-              </button></td>
-                <td> <button class="btn" type="submit">
+              </button></a></td>
+                <td> <button class="btn" type="button" (click)="removePost(post.postId)">
                 <i class="fa fa-trash " aria-hidden="true"  title="Remove"></i>
               </button></td>
               </tr>

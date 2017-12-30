@@ -26,6 +26,8 @@ import { UsersComponent } from './admin/users/users.component';
 import { PostsComponent } from './admin/posts/posts.component';
 import { AdminNavbarComponent } from './admin/parts/admin-navbar/admin-navbar.component';
 import { LoginComponent } from './admin/login/login.component';
+import { PostEditorComponent } from './admin/post-editor/post-editor.component';
+import { PageComponent } from './page/page.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { LoginComponent } from './admin/login/login.component';
     PostsComponent,
     AdminNavbarComponent,
     LoginComponent,
+    PostEditorComponent,
+    PageComponent,
   ],
   imports: [
     BrowserModule,

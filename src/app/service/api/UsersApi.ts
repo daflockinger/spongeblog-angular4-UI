@@ -68,7 +68,7 @@ export class UsersApi {
    * @summary Get User by login name
    * @param userName Login name of the user.
    */
-  public apiV1UsersNameUserNameGetWithHttpInfo(userName: string, extraHttpRequestParams?: any): Observable<UserInfoDTO> {
+  public apiV1UsersNameUserNameGet(userName: string, extraHttpRequestParams?: any): Observable<UserInfoDTO> {
     const path = this.userPath + '/name/' + String(userName);
     // verify required parameter 'userName' is not null or undefined
     if (userName === null || userName === undefined) {

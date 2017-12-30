@@ -43,7 +43,8 @@ export class CategoriesComponent implements /*OnChanges,*/ OnInit {
       categoryId: [category.categoryId],
       name: [category.name, Validators.required],
       parentId: [category.parentId],
-      rank: [category.rank]
+      rank: [category.rank],
+      pageId: [category.pageId]
     }));
     this.categoriesForm = this.formBuilder.group(
       { 'categoryGroups': this.formBuilder.array(categoryGroups) });
@@ -67,7 +68,7 @@ export class CategoriesComponent implements /*OnChanges,*/ OnInit {
   insertCategory(categoryGroup: FormGroup) {
     if (categoryGroup.valid) {
       this.categoriesApi.apiV1CategoriesPostUsingPOST(categoryGroup.value)
-        .subscribe((response: Response) => {
+        .subscribe(() => {
           this.toaster.emit({action: 'toast', params: ['Category created!', 2000]});
           this.initCategories();
         });

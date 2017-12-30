@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StringIterator } from 'lodash';
 
 
 
@@ -9,6 +10,7 @@ export class CleanUrlUtilsService {
   public static readonly USER = 'user';
   public static readonly CATEGORY = 'category';
   public static readonly POST = 'posts';
+  public static readonly PAGE = 'page';
 
   constructor() { }
 
@@ -26,6 +28,22 @@ export class CleanUrlUtilsService {
       id = idString.substr(lastUnderscorePos + 1, idString.length);
     }
     return parseInt(id, 10);
+  }
+
+  public parseName(idString: string): string {
+    let name: string = idString;
+    if (idString == null) {
+      return '';
+    }
+    if (!idString.includes('_')) {
+      return name;
+    }
+    const lastUnderscorePos = idString.lastIndexOf('_');
+
+    if (lastUnderscorePos !== -1 || lastUnderscorePos !== idString.length) {
+      name = idString.substr(0, lastUnderscorePos);
+    }
+    return decodeURI(name.replace(/_/g, ' '));
   }
 
   public cleanLink(type: string, name: string, id: number) {
