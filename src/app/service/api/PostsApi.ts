@@ -24,7 +24,6 @@ import 'rxjs/add/operator/map';
 import * as models from '../model/models';
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
-import { AuthenticationService } from '../auth/authentication.service';
 
 
 @Injectable()
@@ -35,7 +34,7 @@ export class PostsApi {
   public configuration: Configuration = new Configuration();
 
   constructor(protected http: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string,
-  @Optional() configuration: Configuration, @Inject(AuthenticationService) private auth: AuthenticationService) {
+  @Optional() configuration: Configuration) {
     if (basePath) {
       this.basePath = basePath;
     }
@@ -185,29 +184,6 @@ export class PostsApi {
   }
 
   /**
-   * Delete Post
-   * Deletes a Post with defined Id.
-   * @param postId Unique identifier of a Post;
-   */
-  public apiV1PostsPostIdDeleteUsingDELETE(postId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.basePath + '/api/v1/posts/${postId}'
-      .replace('${' + 'postId' + '}', String(postId));
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'postId' is not null or undefined
-    if (postId === null || postId === undefined) {
-      throw new Error('Required parameter postId was null or undefined when calling apiV1PostsPostIdDeleteUsingDELETE.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.delete(path, requestOptions);
-  }
-
-  /**
    * Get Post
    * Fetches Post with defined Id.
    * @param postId Unique identifier of a Post;
@@ -226,76 +202,7 @@ export class PostsApi {
     return this.http.get<PostDTO>(path, requestOptions);
   }
 
-  /**
-   * Create Post
-   * Creates new Post entry.
-   * @param postEdit postEdit
-   */
-  public apiV1PostsPostUsingPOST(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<PostDTO> {
-    const path = this.basePath + '/api/v1/posts';
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'postEdit' is not null or undefined
-    if (postEdit === null || postEdit === undefined) {
-      throw new Error('Required parameter postEdit was null or undefined when calling apiV1PostsPostUsingPOST.');
-    }
-    headers = headers.append('Content-Type', 'application/json');
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.post<PostDTO>(path, postEdit, requestOptions);
-  }
-
-  /**
-   * Update Post
-   * Updated a Post entry.
-   * @param postEdit postEdit
-   */
-  public apiV1PostsPutUsingPUT(postEdit: models.PostDTO, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.basePath + '/api/v1/posts';
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'postEdit' is not null or undefined
-    if (postEdit === null || postEdit === undefined) {
-      throw new Error('Required parameter postEdit was null or undefined when calling apiV1PostsPutUsingPUT.');
-    }
-    headers = headers.append('Content-Type', 'application/json');
-
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-
-    return this.http.put(path, postEdit, requestOptions);
-  }
-
-  /**
-   * Rewind Post
-   * Restores previous Post entry.
-   * @param postId Unique identifier of a Post;
-   */
-  public apiV1PostsRewindPostIdPutUsingPUT(postId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.basePath + '/api/v1/posts/rewind/${postId}'
-      .replace('${' + 'postId' + '}', String(postId));
-
-    const headers = new HttpHeaders();
-    // verify required parameter 'postId' is not null or undefined
-    if (postId === null || postId === undefined) {
-      throw new Error('Required parameter postId was null or undefined when calling apiV1PostsRewindPostIdPutUsingPUT.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-
-    return this.http.put(path, requestOptions);
-  }
-
-  /**
+   /**
    * Posts with status
    * Returns all posts with defined status.
    * @param status Post Status Id

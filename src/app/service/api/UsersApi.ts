@@ -1,6 +1,4 @@
 import { UserInfoDTO } from './../model/UserInfoDTO';
-import { UserEditDTO } from './../model/UserEditDTO';
-import { AuthenticationService } from './../auth/authentication.service';
 /**
  * SpongeblogSP API
  * Spongeblog blogging API
@@ -25,7 +23,6 @@ export class UsersApi {
   public configuration: Configuration = new Configuration();
 
   constructor(protected http: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string,
-  @Inject(AuthenticationService) private auth: AuthenticationService,
   @Optional() configuration: Configuration) {
     if (basePath) {
       this.basePath = basePath;
@@ -33,21 +30,6 @@ export class UsersApi {
     if (configuration) {
       this.configuration = configuration;
     }
-  }
-
-  /**
-   * Returns all Users.
-   * @summary All Users
-   */
-  public apiV1UsersGetUsingGET(extraHttpRequestParams?: any): Observable<Array<UserEditDTO>> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-    };
-    return this.http.get<Array<UserEditDTO>>(this.userPath, requestOptions)
-      .map((users: any) => users);
   }
 
   /**
@@ -75,108 +57,5 @@ export class UsersApi {
       throw new Error('Required parameter userName was null or undefined when calling apiV1UsersNameUserNameGet.');
     }
     return this.http.get<UserInfoDTO>(path);
-  }
-
-  /**
-   * Creates new User entry.
-   * @summary Create User
-   * @param userEdit userEdit
-   */
-  public apiV1UsersPostUsingPOST(userEdit: models.UserEditDTO, extraHttpRequestParams?: any): Observable<UserEditDTO> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'userEdit' is not null or undefined
-    if (userEdit === null || userEdit === undefined) {
-      throw new Error('Required parameter userEdit was null or undefined when calling apiV1UsersPostUsingPOST.');
-    }
-    headers = headers.set('Content-Type', 'application/json');
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.post(this.userPath, userEdit, requestOptions);
-  }
-
-  /**
-   * Updated a User entry.
-   * @summary Update User
-   * @param userEdit userEdit
-   */
-  public apiV1UsersPutUsingPUT(userEdit: models.UserEditDTO, extraHttpRequestParams?: any): Observable<any> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'userEdit' is not null or undefined
-    if (userEdit === null || userEdit === undefined) {
-      throw new Error('Required parameter userEdit was null or undefined when calling apiV1UsersPutUsingPUT.');
-    }
-    headers = headers.set('Content-Type', 'application/json');
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.put(this.userPath, userEdit, requestOptions);
-  }
-
-  /**
-   * Restores previous User entry.
-   * @summary Rewind User
-   * @param userId Unique identifier of a User;
-   */
-  public apiV1UsersRewindUserIdPutUsingPUT(userId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.userPath + '/rewind/' + String(userId);
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'userId' is not null or undefined
-    if (userId === null || userId === undefined) {
-      throw new Error('Required parameter userId was null or undefined when calling apiV1UsersRewindUserIdPutUsingPUT.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.put(path, null, requestOptions);
-  }
-
-  /**
-   * Deletes a User with defined Id.
-   * @summary Delete User
-   * @param userId Unique identifier of a User;
-   */
-  public apiV1UsersUserIdDeleteUsingDELETE(userId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.userPath + '/' + String(userId);
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'userId' is not null or undefined
-    if (userId === null || userId === undefined) {
-      throw new Error('Required parameter userId was null or undefined when calling apiV1UsersUserIdDeleteUsingDELETE.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.delete(path, requestOptions);
-  }
-
-  /**
-   * Fetches User with defined Id.
-   * @summary Get User
-   * @param userId Unique identifier of a User;
-   */
-  public apiV1UsersUserIdGetUsingGET(userId: number, extraHttpRequestParams?: any): Observable<UserEditDTO> {
-    const path = this.userPath + '/' + String(userId);
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'userId' is not null or undefined
-    if (userId === null || userId === undefined) {
-      throw new Error('Required parameter userId was null or undefined when calling apiV1UsersUserIdGetUsingGET.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.get<UserEditDTO>(path, requestOptions);
   }
 }

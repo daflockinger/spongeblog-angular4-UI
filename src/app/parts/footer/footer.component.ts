@@ -1,6 +1,6 @@
+import { FilterValue } from './../../service/utils/post-utils.service';
 import { PostPreviewDTO } from './../../service/model/PostPreviewDTO';
 import { PagesApi } from './../../service/api/PagesApi';
-import { FilterValue, PostUtilsService } from './../../service/utils/post-utils.service';
 import { BlogApi } from './../../service/api/BlogApi';
 import { BlogDTO } from './../../service/model/BlogDTO';
 import { Component, Input, OnInit, Inject } from '@angular/core';
