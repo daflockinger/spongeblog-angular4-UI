@@ -49,11 +49,7 @@ export class PagesApi {
     if (withoutCategory !== undefined) {
       queryParameters = queryParameters.set('without-category', <any>withoutCategory);
     }
-    const requestOptions: any = {
-      params: queryParameters,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.get<PostsPage>(path, requestOptions);
+    return this.http.get(path, {params: queryParameters});
   }
 
   /**
@@ -68,9 +64,6 @@ export class PagesApi {
     if (pageId === null || pageId === undefined) {
       throw new Error('Required parameter pageId was null or undefined when calling apiV1PostsPageIdGetUsingGET.');
     }
-    const requestOptions: any = {
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.get<PostDTO>(path, requestOptions);
+    return this.http.get<PostDTO>(path);
   }
 }

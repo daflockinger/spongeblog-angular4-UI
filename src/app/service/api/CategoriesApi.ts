@@ -37,15 +37,10 @@ export class CategoriesApi {
    */
   public apiV1CategoriesCategoryIdGetUsingGET(categoryId: number, extraHttpRequestParams?: any): Observable<CategoryDTO> {
     const path = this.categoryPath + '/' +  String(categoryId);
-    const headers = new HttpHeaders();
     if (categoryId === null || categoryId === undefined) {
       throw new Error('Required parameter categoryId was null or undefined when calling apiV1CategoriesCategoryIdGetUsingGET.');
     }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.get<CategoryDTO>(path, requestOptions);
+    return this.http.get<CategoryDTO>(path);
   }
 
   /**
@@ -68,6 +63,6 @@ export class CategoriesApi {
    * @summary All Categorys
    */
   public apiV1CategoriesGetUsingGET(extraHttpRequestParams?: any): Observable<Array<CategoryDTO>> {
-    return this.http.get(this.categoryPath);
+    return this.http.get<Array<CategoryDTO>>(this.categoryPath);
   }
 }
