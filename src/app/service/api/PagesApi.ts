@@ -57,7 +57,7 @@ export class PagesApi {
       queryParameters = queryParameters.set('without-category', <any>withoutCategory);
     }
     const requestOptions: any = {
-      search: queryParameters,
+      params: queryParameters,
       withCredentials: this.configuration.withCredentials
     };
     return this.http.get<PostsPage>(path, requestOptions);

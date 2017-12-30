@@ -14,8 +14,7 @@
   <div class="col s12 m12 l12">
     <div class="card">
             <div class="card-content left-align">
-              <p class="flow-text">
-                {{post.content}}
+              <p class="flow-text" [innerHTML]="post.content">
               </p>
             </div>
             <div class="card-action">

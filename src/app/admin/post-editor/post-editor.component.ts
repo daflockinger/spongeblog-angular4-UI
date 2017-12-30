@@ -62,6 +62,7 @@ export class PostEditorComponent implements OnInit {
         post.tags = [];
         post.created = new Date();
         post.modified = new Date();
+        post.status = PostDTO.StatusEnum.PUBLIC;
 
         return post;
       });
@@ -78,6 +79,7 @@ export class PostEditorComponent implements OnInit {
   private createFilterValues(filterValueMap: Map<string, Observable<FilterValue[]>>) {
     filterValueMap.get(PostUtilsService.CATEGORY).subscribe(categories => {
       this.categories = categories;
+      this.categories.push({'id': null, 'name': 'None (Bottom menu link)'});
     });
     filterValueMap.get(PostUtilsService.STATUS).subscribe(statuses => {
       this.statuses = statuses;
@@ -91,6 +93,9 @@ export class PostEditorComponent implements OnInit {
   }
 
   private createForm(tags: FilterValue[], post: PostDTO) {
+    if (post.category === null) {
+      post.category = {};
+    }
     this.postEditForm = this.formBuilder.group({
       authorId: [post.author.userId],
       categoryid: [post.category.categoryId],
@@ -142,8 +147,13 @@ export class PostEditorComponent implements OnInit {
     author.userId = Number(this.postEditForm.value['authorId']);
     post.author = author;
     const category: CategoryDTO = {};
-    category.categoryId = Number(this.postEditForm.value['categoryid']);
-    post.category = category;
+    const categoryId = this.postEditForm.value['categoryid'];
+    if (categoryId !== null) {
+      category.categoryId = Number(categoryId);
+      post.category = category;
+    } else {
+      post.category = null;
+    }
     post.tags = tags;
     return post;
   }

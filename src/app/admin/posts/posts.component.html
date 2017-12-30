@@ -29,9 +29,7 @@
             <label>Filter by</label>
           </div>
           <div class="input-field col s2">
-            <button class="btn" type="submit">
-							      Show
-						      </button>
+            <button class="btn" type="submit">Show</button>
           </div>
         </div>
         <div class="row">
@@ -54,7 +52,7 @@
                 <td>{{post.created | date}}</td>
                 <td>{{post.title}}</td>
                 <td>{{post.status}}</td>
-                <td>{{post.category.name}}</td>
+                <td><span *ngIf="post.category">{{post.category.name}}</span></td>
                 <td>{{post.author.nickName}}</td>
                 <td><a [routerLink]="['/admin/posts/' + post.postId]" target="_blank"><button class="btn" type="button">
                 <i class="fa fa-edit " aria-hidden="true"  title="Edit"></i>

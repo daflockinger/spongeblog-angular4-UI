@@ -6,25 +6,27 @@ import { PostsApi } from './../service/api/PostsApi';
 import { Component, OnInit } from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 import { DatePipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
-  providers: [PostsApi, CleanUrlUtilsService]
+  providers: [PostsApi, CleanUrlUtilsService, Title]
 })
 
 export class PostComponent implements OnInit {
   post: PostDTO;
 
   constructor(private postApi: PostsApi, private route: ActivatedRoute,
-    private utils: CleanUrlUtilsService) {}
+    private utils: CleanUrlUtilsService, private titleService: Title) {}
 
   ngOnInit() {
     this.route.paramMap.switchMap((params: ParamMap) =>
     this.postApi.apiV1PostsPostIdGetUsingGET(this.utils.parseId(params.get('id'))))
      .subscribe((post: PostDTO) => {
           this.post = post;
+          this.titleService.setTitle(post.title);
         });
   }
 
