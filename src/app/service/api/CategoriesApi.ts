@@ -1,5 +1,4 @@
 import { CategoryDTO } from './../model/CategoryDTO';
-import { AuthenticationService } from './../auth/authentication.service';
 /**
  * SpongeblogSP API
  * Spongeblog blogging API
@@ -22,7 +21,6 @@ export class CategoriesApi {
   public configuration: Configuration = new Configuration();
 
   constructor(protected http: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string,
-  @Inject(AuthenticationService) private auth: AuthenticationService,
   @Optional() configuration: Configuration) {
     if (basePath) {
       this.basePath = basePath;
@@ -32,43 +30,17 @@ export class CategoriesApi {
     }
   }
 
-  /**
-   * Deletes a Category with defined Id.
-   * @summary Delete Category
-   * @param categoryId Unique identifier of a Category;
-   */
-  public apiV1CategoriesCategoryIdDeleteUsingDELETE(categoryId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.categoryPath + '/' +  String(categoryId);
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'categoryId' is not null or undefined
-    if (categoryId === null || categoryId === undefined) {
-      throw new Error('Required parameter categoryId was null or undefined when calling apiV1CategoriesCategoryIdDeleteUsingDELETE.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.delete(path, requestOptions);
-  }
-
-  /**
+   /**
    * Fetches Category with defined Id.
    * @summary Get Category
    * @param categoryId Unique identifier of a Category;
    */
   public apiV1CategoriesCategoryIdGetUsingGET(categoryId: number, extraHttpRequestParams?: any): Observable<CategoryDTO> {
     const path = this.categoryPath + '/' +  String(categoryId);
-    const headers = new HttpHeaders();
     if (categoryId === null || categoryId === undefined) {
       throw new Error('Required parameter categoryId was null or undefined when calling apiV1CategoriesCategoryIdGetUsingGET.');
     }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.get<CategoryDTO>(path, requestOptions);
+    return this.http.get<CategoryDTO>(path);
   }
 
   /**
@@ -91,70 +63,6 @@ export class CategoriesApi {
    * @summary All Categorys
    */
   public apiV1CategoriesGetUsingGET(extraHttpRequestParams?: any): Observable<Array<CategoryDTO>> {
-    return this.http.get(this.categoryPath);
+    return this.http.get<Array<CategoryDTO>>(this.categoryPath);
   }
-
-  /**
-   * Creates new Category entry.
-   * @summary Create Category
-   * @param categoryEdit categoryEdit
-   */
-  public apiV1CategoriesPostUsingPOST(categoryEdit: models.CategoryDTO, extraHttpRequestParams?: any): Observable<CategoryDTO> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'categoryEdit' is not null or undefined
-    if (categoryEdit === null || categoryEdit === undefined) {
-      throw new Error('Required parameter categoryEdit was null or undefined when calling apiV1CategoriesPostUsingPOST.');
-    }
-    headers = headers.set('Content-Type', 'application/json');
-
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials
-    };
-    return this.http.post(this.categoryPath, categoryEdit, requestOptions);
-  }
-
-  /**
-   * Updated a Category entry.
-   * @summary Update Category
-   * @param categoryEdit categoryEdit
-   */
-  public apiV1CategoriesPutUsingPUT(categoryEdit: models.CategoryDTO, extraHttpRequestParams?: any): Observable<any> {
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    if (categoryEdit === null || categoryEdit === undefined) {
-      throw new Error('Required parameter categoryEdit was null or undefined when calling apiV1CategoriesPutUsingPUT.');
-    }
-    headers = headers.set('Content-Type', 'application/json');
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.put(this.categoryPath, categoryEdit, requestOptions);
-  }
-
-  /**
-   * Restores previous Category entry.
-   * @summary Rewind Category
-   * @param categoryId Unique identifier of a Category;
-   */
-  public apiV1CategoriesRewindCategoryIdPutUsingPUT(categoryId: number, extraHttpRequestParams?: any): Observable<any> {
-    const path = this.categoryPath + '/rewind/' + String(categoryId);
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    // verify required parameter 'categoryId' is not null or undefined
-    if (categoryId === null || categoryId === undefined) {
-      throw new Error('Required parameter categoryId was null or undefined when calling apiV1CategoriesRewindCategoryIdPutUsingPUT.');
-    }
-    const requestOptions: any = {
-      headers: headers,
-      withCredentials: this.configuration.withCredentials,
-      responseType: 'text'
-    };
-    return this.http.put(path, null, requestOptions);
-  }
-
 }

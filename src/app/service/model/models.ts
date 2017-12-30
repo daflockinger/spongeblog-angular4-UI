@@ -8,5 +8,4 @@ export * from './PostDTO';
 export * from './PostPreviewDTO';
 export * from './PostsPage';
 export * from './TagDTO';
-export * from './UserEditDTO';
 export * from './UserInfoDTO';
