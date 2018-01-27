@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { BlogDTO } from './../model/BlogDTO';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { InjectionError } from '@angular/core/src/di/reflective_errors';
@@ -16,7 +17,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class BlogApi {
 
-  protected basePath = 'http://localhost:8081';
+  protected basePath = environment.apiUrl;
   private blogPath = this.basePath + '/api/v1/blog';
   public defaultHeaders: HttpHeaders = new HttpHeaders();
   public configuration: Configuration = new Configuration();

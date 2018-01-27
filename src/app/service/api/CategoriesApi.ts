@@ -10,12 +10,13 @@ import 'rxjs/add/operator/map';
 import * as models from '../model/models';
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable()
 export class CategoriesApi {
 
-  protected basePath = 'http://localhost:8081';
+  protected basePath = environment.apiUrl;
   private categoryPath = this.basePath + '/api/v1/categories';
   public defaultHeaders: Headers = new Headers();
   public configuration: Configuration = new Configuration();

@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { UserInfoDTO } from './../model/UserInfoDTO';
 /**
  * SpongeblogSP API
@@ -17,7 +18,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class UsersApi {
 
-  protected basePath = 'http://localhost:8081';
+  protected basePath = environment.apiUrl;
   private userPath = this.basePath + '/api/v1/users';
   public defaultHeaders: Headers = new Headers();
   public configuration: Configuration = new Configuration();

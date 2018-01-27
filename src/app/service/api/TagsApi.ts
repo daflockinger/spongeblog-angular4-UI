@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { TagDTO } from './../model/TagDTO';
 /**
  * SpongeblogSP API
@@ -16,7 +17,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class TagsApi {
 
-  protected basePath = 'http://localhost:8081';
+  protected basePath = environment.apiUrl;
   private tagsPath = this.basePath + '/api/v1/tags';
   public defaultHeaders: Headers = new Headers();
   public configuration: Configuration = new Configuration();
