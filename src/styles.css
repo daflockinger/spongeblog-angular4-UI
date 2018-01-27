@@ -6,6 +6,11 @@ body {
     background-attachment: fixed;
 }
 
+/*Fix materialize sidenav overlay issue*/
+#sidenav-overlay {
+  z-index: 1;
+}
+
 .parallax-container {
   height: auto;
 }

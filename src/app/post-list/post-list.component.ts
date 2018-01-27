@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { TagDTO } from './../service/model/TagDTO';
 import { TagDefinition } from '@angular/compiler';
 import { CategoryDTO, UserInfoDTO } from '../service';
@@ -27,8 +28,8 @@ export class PostListComponent implements OnInit {
   currentPage: number;
   path: string;
 
-  private DEFAULT_PAGE_NUMBER = 1;
-  private DEFAULT_POSTS_PER_PAGE = 2;
+  private DEFAULT_PAGE_NUMBER = environment.defaultPage;
+  private DEFAULT_POSTS_PER_PAGE = environment.postPerPage;
   private DEFAULT_STATUS = 'PUBLIC';
 
   constructor(private postApi: PostsApi, private blogApi: BlogApi,

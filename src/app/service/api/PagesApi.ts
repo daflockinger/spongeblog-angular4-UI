@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { PostsPage } from './../model/PostsPage';
 import { PostDTO } from './../model/PostDTO';
 /**
@@ -23,7 +24,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class PagesApi {
 
-  protected basePath = 'http://localhost:8081';
+  protected basePath = environment.apiUrl;
   public defaultHeaders: Headers = new Headers();
   public configuration: Configuration = new Configuration();
 
